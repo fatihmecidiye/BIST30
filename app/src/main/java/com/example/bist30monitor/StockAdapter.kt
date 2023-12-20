@@ -12,6 +12,7 @@ class StockAdapter(private val stockList: MutableList<Stock>) :
     inner class StockViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textViewStockName: TextView = itemView.findViewById(R.id.textViewStockName)
         val textViewStockPrice: TextView = itemView.findViewById(R.id.textViewStockPrice)
+        val textViewStockDailyChange: TextView = itemView.findViewById(R.id.textViewStockDailyChange)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StockViewHolder {
@@ -22,8 +23,9 @@ class StockAdapter(private val stockList: MutableList<Stock>) :
 
     override fun onBindViewHolder(holder: StockViewHolder, position: Int) {
         val currentStock = stockList[position]
-        holder.textViewStockName.text = "Stock Name: ${currentStock.name}"
-        holder.textViewStockPrice.text = "Stock Price: ${currentStock.price}"
+        holder.textViewStockName.text = "Hisse: ${currentStock.name}"
+        holder.textViewStockPrice.text = "Fiyat: ${currentStock.price} ₺"
+        holder.textViewStockDailyChange.text = "Günlük Değişim: ${currentStock.dailyChange}%"
     }
 
     override fun getItemCount(): Int {

@@ -18,6 +18,8 @@ data class StockMeta(
     val currency: String?,
     val symbol: String?,
     val exchangeName: String?,
+    val regularMarketPrice: Double?,
+    val previousClose: Double?,
     // Add other relevant fields
 )
 

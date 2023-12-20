@@ -110,11 +110,16 @@ class AselsManager(private val context: AppCompatActivity) {
                     val indicators = result?.indicators?.quote?.get(0)
 
                     val name = meta?.symbol ?: "N/A"
-                    val price = indicators?.close?.get(0) ?: 0.0
+                    val price = meta?.regularMarketPrice ?: 0.0
+                    var dailyChange = ( price - (meta?.previousClose ?: 0.0)) / (meta?.previousClose?: 1.0) * 100
 
                     // Update UI on the main thread
                     withContext(Dispatchers.Main) {
-                        val stock = Stock(name, price)
+                        val cleanName = name?.removeSuffix(".IS") ?: "N/A"
+                        val formattedPrice = String.format("%.2f", price)
+                        val formattedPriceDouble = formattedPrice.toDoubleOrNull() ?: 0.0
+                        var formattedDailyChange = String.format("%.2f", dailyChange).toDoubleOrNull() ?: 0.0
+                        val stock = Stock(cleanName, formattedPriceDouble, formattedDailyChange)
                         stockList.add(stock)
                         adapter.notifyDataSetChanged()
                     }
