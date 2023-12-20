@@ -9,6 +9,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val aselsManager = AselsManager(this) // Pass the reference of the activity
-        aselsManager.fetchAndDisplayStockData()
+        // Call fetchAndDisplayStockData function from AselsManager
+        aselsManager.fetchAndDisplayMultipleStocks()
     }
 }

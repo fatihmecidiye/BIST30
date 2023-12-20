@@ -2,9 +2,12 @@ package com.example.bist30monitor
 
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 // ...
 
@@ -31,7 +34,7 @@ import kotlinx.coroutines.launch
 }*/
 
 
-class AselsManager(private val context: AppCompatActivity) {
+/*class AselsManager(private val context: AppCompatActivity) {
     // Your existing code for fetching stock data
     // ...
 
@@ -67,6 +70,57 @@ class AselsManager(private val context: AppCompatActivity) {
                 }
             } else {
                 // Handle error case
+            }
+        }
+    }
+}*/
+
+class AselsManager(private val context: AppCompatActivity) {
+
+    // Function to fetch stock data and update UI for multiple stocks
+    fun fetchAndDisplayMultipleStocks() {
+        val stockNames = listOf(
+            "akbnk", "alark", "arclk", "asels", "astor",
+            "bimas", "ekgyo", "enkai", "eregl", "froto",
+            "garan", "gubrf", "hekts", "isctr", "kchol",
+            "kontr", "kozal", "krdmd", "odas", "oyakc",
+            "petkm", "pgsus", "sahol", "sasa", "sise",
+            "tcell", "thyao", "toaso", "tuprs", "ykbnk"
+        )
+
+        val stockList = mutableListOf<Stock>()
+        val recyclerView: RecyclerView = context.findViewById(R.id.recyclerView)
+
+        // Set up RecyclerView with an adapter
+        val adapter = StockAdapter(stockList)
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = adapter
+
+        // Fetch data for each stock
+        CoroutineScope(Dispatchers.IO).launch {
+            val service = NetworkService.yahooFinanceApi
+
+            stockNames.forEach { stockName ->
+                val response = service.getStockData("$stockName.is")
+
+                // Handle the response and extract data
+                if (response.error.isNullOrEmpty()) {
+                    val result = response.chart?.result?.get(0)
+                    val meta = result?.meta
+                    val indicators = result?.indicators?.quote?.get(0)
+
+                    val name = meta?.symbol ?: "N/A"
+                    val price = indicators?.close?.get(0) ?: 0.0
+
+                    // Update UI on the main thread
+                    withContext(Dispatchers.Main) {
+                        val stock = Stock(name, price)
+                        stockList.add(stock)
+                        adapter.notifyDataSetChanged()
+                    }
+                } else {
+                    // Handle error case for individual stock
+                }
             }
         }
     }
