@@ -1,9 +1,12 @@
 package com.example.bist30monitor
 
+import android.graphics.Color.green
+import android.graphics.Color.red
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 
 /*class StockAdapter(private val stockList: MutableList<Stock>) :
@@ -57,6 +60,15 @@ class StockAdapter(private val stockList: MutableList<Stock>) :
         holder.textViewStockName.text = currentStock.name
         holder.textViewStockPrice.text = "${currentStock.price} ₺"
         holder.textViewStockDailyChange.text = "${currentStock.dailyChange}%"
+
+        // Set background color based on daily change
+        val dailyChange = currentStock.dailyChange
+        if (dailyChange > 0) {
+            holder.textViewStockDailyChange.setBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.transparentGreen))
+        } else {
+            holder.textViewStockDailyChange.setBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.transparentRed))
+        }
+
     }
 
     override fun getItemCount(): Int {
