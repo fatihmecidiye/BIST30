@@ -11,4 +11,5 @@
     <color name="red">#FF0000</color>
     <color name="transparentGreen">#8000FF00</color>
     <color name="transparentRed">#80F43B3B</color>
+    <color name="chart_line_color">#FF3700B3</color>
 </resources>

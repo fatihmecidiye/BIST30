@@ -12,4 +12,6 @@ object NetworkService {
         .build()
 
     val yahooFinanceApi: YahooFinanceApiService = retrofit.create(YahooFinanceApiService::class.java)
+
+
 }

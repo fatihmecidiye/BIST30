@@ -43,10 +43,29 @@ import androidx.recyclerview.widget.RecyclerView
 class StockAdapter(private val stockList: MutableList<Stock>) :
     RecyclerView.Adapter<StockAdapter.StockViewHolder>() {
 
+    // Interface to handle item click events
+    interface OnStockClickListener {
+        fun onStockClick(stock: Stock)
+    }
+    private var onStockClickListener: OnStockClickListener? = null
+
+    fun setOnStockClickListener(listener: OnStockClickListener) {
+        this.onStockClickListener = listener
+    }
     inner class StockViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textViewStockName: TextView = itemView.findViewById(R.id.textViewStockName)
         val textViewStockPrice: TextView = itemView.findViewById(R.id.textViewStockPrice)
         val textViewStockDailyChange: TextView = itemView.findViewById(R.id.textViewStockDailyChange)
+
+        init {
+            itemView.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onStockClickListener?.onStockClick(stockList[position])
+                }
+            }
+        }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StockViewHolder {

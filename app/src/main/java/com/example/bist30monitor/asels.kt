@@ -1,7 +1,9 @@
 package com.example.bist30monitor
 
+import android.content.Intent
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineScope
@@ -77,6 +79,7 @@ import kotlinx.coroutines.withContext
 
 class AselsManager(private val context: AppCompatActivity) {
 
+    val stockList = mutableListOf<Stock>()
     // Function to fetch stock data and update UI for multiple stocks
     fun fetchAndDisplayMultipleStocks() {
         val stockNames = listOf(
@@ -88,11 +91,22 @@ class AselsManager(private val context: AppCompatActivity) {
             "tcell", "thyao", "toaso", "tuprs", "ykbnk"
         )
 
-        val stockList = mutableListOf<Stock>()
+
         val recyclerView: RecyclerView = context.findViewById(R.id.recyclerView)
 
         // Set up RecyclerView with an adapter
         val adapter = StockAdapter(stockList)
+
+        adapter.setOnStockClickListener(object : StockAdapter.OnStockClickListener {
+            override fun onStockClick(stock: Stock) {
+                // Start the detail activity and pass relevant data
+                val intent = Intent(context, StockDetailActivity::class.java)
+                intent.putExtra("STOCK_NAME", stock.name)
+                // Add other relevant data as extras to the intent
+                startActivity(context, intent, null)
+            }
+        })
+
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter
 
@@ -129,4 +143,11 @@ class AselsManager(private val context: AppCompatActivity) {
             }
         }
     }
+
+    @JvmName("getStockList1")
+    fun getStockList(): MutableList<Stock> {
+        return stockList
+    }
+
+
 }
